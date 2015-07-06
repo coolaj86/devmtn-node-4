@@ -9,8 +9,8 @@ var server = https.createServer({
 , cert: testCert.cert
 , ca: testCert.ca
 , SNICallback: function (domainname, cb) {
-    // test domainname, if needed
-    cb(null, testCert);
+    // check domainname if you need to switch between certificates
+    cb(null, require('tls').createSecureContext(testCert));
   }
 });
 var insecure = http.createServer();
@@ -24,4 +24,4 @@ server.listen(port, function () {
 insecure.on('request', app());
 insecure.listen(8080, function () {
   console.log('Listening ', insecure.address().port);
-})
+});
