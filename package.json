@@ -1,0 +1,25 @@
+{
+  "name": "devmtn-node-4",
+  "version": "1.0.0",
+  "description": "Our happy coding time... for the LAST time. Exploring Auth",
+  "main": "serve.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coolaj86/devmtn-node-4.git"
+  },
+  "author": "AJ ONeal <coolaj86@gmail.com> (http://coolaj86.com/)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/coolaj86/devmtn-node-4/issues"
+  },
+  "homepage": "https://github.com/coolaj86/devmtn-node-4#readme",
+  "dependencies": {
+    "basic-auth": "^1.0.3",
+    "body-parser": "^1.13.2",
+    "express": "^4.13.1",
+    "localhost.daplie.com-certificates": "^1.0.1"
+  }
+}
