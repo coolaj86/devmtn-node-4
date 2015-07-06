@@ -1,3 +1,6 @@
+# don't publish our secrets
+config.js
+
 # Logs
 logs
 *.log
