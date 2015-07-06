@@ -21,6 +21,8 @@
     "body-parser": "^1.13.2",
     "express": "^4.13.1",
     "express-session": "^1.11.3",
-    "localhost.daplie.com-certificates": "^1.0.1"
+    "localhost.daplie.com-certificates": "^1.0.1",
+    "passport": "^0.2.2",
+    "passport-twitter": "^1.0.3"
   }
 }
