@@ -23,6 +23,7 @@
     "express-session": "^1.11.3",
     "localhost.daplie.com-certificates": "^1.0.1",
     "passport": "^0.2.2",
-    "passport-twitter": "^1.0.3"
+    "passport-twitter": "^1.0.3",
+    "scmp": "^1.0.0"
   }
 }

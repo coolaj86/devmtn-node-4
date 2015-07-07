@@ -1,11 +1,17 @@
 <html>
   <body>
     <form method="POST" action="/api/login-with-form">
-      <input type="text" name="username" />
-      <input type="password" name="password" />
+      <input class="js-username" type="text" name="username" />
+      <input class="js-password" type="password" name="password" />
       <button type="submit">Login</button>
     </form>
 
-    <a href="/api/oauth/authorization_dialog/twitter">Connect with Twitter</a>
+    <ul>
+      <li><a href="/api/oauth/authorization_dialog/twitter">Connect with Twitter</a></li>
+      <li><a href="/api/login-with-basic">Access Basic Auth Realm</a></li>
+      <li><a href="https://fake:fake@localhost.daplie.com:8443/api/login-with-basic">Logout Basic Auth Realm</a></li>
+    <ul>
+    <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+    <script src="form.js"></script>
   </body>
 </html>

@@ -8,4 +8,8 @@ module.exports = {
     key: 'zLSiRjzDHe8atXtTHbW4XSINr'
   , secret: 'jt5ncEQO5y7E4Z5aQguyZrpDdW8OohVXZz5pBL5yjghTE6CPvH'
   }
+, admin: {
+    name: 'coolaj86'
+  , pass: 'supersecret'
+  }
 };

@@ -64,13 +64,13 @@ app.post('/api/login-with-basic', function (req, res) {
   }
 
   res.send({ success: true });
-})
+});
 ```
 
 Create a link and try to log in
 
 ```html
-<a href="/api/login-with-http-basic">Go to login page</a>
+<a href="/api/login-with-basic">Go to login page</a>
 ```
 
 Using the username and password options for `$.ajax`, `$http`, and node's
@@ -107,6 +107,10 @@ gain access to their account.
 Google does not index links with `user:pass@` in them and I don't believe
 it honors those links if they are clicked on in Chrome.
 
+Also, the browser will always send Basic Auth once you are logged in
+and there isn't any way to log out - other than attempting a failing
+login or changing the "realm" of the login.
+
 Form Auth
 ---------
 
@@ -136,13 +140,13 @@ app.post('/api/login-with-form', function (req, res) {
   }
 
   res.send({ success: true });
-})
+});
 ```
 
 Create a link and try to log in
 
 ```html
-<a href="/api/login-with-http-basic">Go to login page</a>
+<a href="/api/login-with-form">Go to login page</a>
 ```
 
 JSON
@@ -229,13 +233,17 @@ var session = require('express-session');
 var cookieSecret = require('./config').cookieSecret;
 
 app.set('trust proxy', 1);
-app.use('/', session({
+// only set cookies at '/api'
+app.use('/api', session({
   secret: [ cookieSecret ],
 , cookie: {
-    path: '/api/'
+    store: new session.MemoryStore()
+    // tell the browser to only send cookies at '/api'
+  , path: '/api'
+    // only send cookies over https
   , secure: true
+    // tell the browser to not share the cookies with js
   , httpOnly: true
-  , store: new session.MemoryStore()
   }
 }))
 
