@@ -18,10 +18,11 @@ var app = require('./app');
 
 server.on('request', app());
 server.listen(port, function () {
-  console.log('Listening ', server.address().port);
+  console.log('Listening on https://localhost.daplie.com:'
+    + server.address().port);
 });
 
 insecure.on('request', app());
 insecure.listen(8080, function () {
-  console.log('Listening ', insecure.address().port);
+  console.log('Listening insecurely on', insecure.address().port);
 });

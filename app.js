@@ -7,52 +7,83 @@ module.exports = function () {
   var TwitterStrategy = require('passport-twitter').Strategy;
   var bodyParser = require('body-parser');
   var app = express();
-  var requireAuth = function(req, res, next) {
+  var twConfig = require('./config').twitter;
+  var twCallback = '/api/oauth/callback/twitter';
+  var memDb = {};
+
+  function requireAuth(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
     }
-    return res.redirect('/login');
+    return res.redirect('/');
   }
 
-  app.use('/', bodyParser.urlencoded());
+  // using urlencoded opens you up to CSRF attacks
+  //app.use('/', bodyParser.urlencoded());
   app.use('/', bodyParser.json());
+
   // express session must come first
-  app.use('/', session({ secret: require('./config').cookieSecret }));
-  // passport comes after
+  app.use('/', session({
+    secret: require('./config').cookieSecret
+  , cookie: {
+      secure: true
+    , httpOnly: true
+    , path: '/api'
+    , store: new session.MemoryStore()
+    }
+  }));
+
+  // passport init and session comes after express session
   app.use(passport.initialize());
   app.use(passport.session());
 
-  passport.use('twitter', new TwitterStrategy({
-    consumerKey: 'qgT3gYCqZCTbyL5EVzcOMVL8R',
-    consumerSecret: 'Qkp6wOagy4pnC87kjBlwEAbFQstLrlFADvpitZ4tYNdc9UjE7G',
-    callbackURL: 'http://localhost:8080/auth/twitter/callback'
+  passport.use('myTwitter', new TwitterStrategy({
+    consumerKey: twConfig.key
+  , consumerSecret: twConfig.secret
+  , callbackURL: 'https://localhost.daplie.com:8443' + twCallback
   }, function(token, tokenSecret, profile, done) {
-    console.log('some kind of test', token);
-    return done(null, profile);
+    console.log('twitter profile:', profile);
+    // the token and tokenSecret I could use to tweet on behalf of the user
+
+    // this object, is going to end up as `req.user` and `req.session.user`
+    return done(null, {
+      token: token
+    , tokenSecret: tokenSecret
+    , profile: profile
+    });
   }));
 
   // save to database
   passport.serializeUser(function(user, done) {
-    done(null, user);
+    var id = user.profile.id;
+
+    // this should go into mongo db or whatever and hand back an id
+    memDb[id] = user;
+
+    done(null, id);
   });
 
   // retrieve from database
-  passport.deserializeUser(function(obj, done) {
-    done(null, obj);
+  passport.deserializeUser(function(id, done) {
+    // this should retrieve from mongo and hand back a user object
+    var user = memDb[id];
+
+    done(null, user);
   });
 
-  app.get('/auth/twitter/authorization_dialog'
-    , passport.authenticate('twitter'));
-  app.get('/auth/twitter/callback'
-    , passport.authenticate('twitter', {
-      successRedirect: '/home',
-      failureRedirect: '/login'
+  // Passport handles the OAuth details
+  app.get('/api/oauth/authorization_dialog/twitter'
+    , passport.authenticate('myTwitter'));
+  app.get(twCallback
+    , passport.authenticate('myTwitter', {
+      successRedirect: '/login_success',
+      failureRedirect: '/?error=E_BAD_AUTH&error_message=login%20failed'
     }), function(req, res) {
       console.log(req.session);
       res.end("doesn't get here");
     });
 
-  app.use('/', function (req, res, next) {
+  app.use('/api', function (req, res, next) {
     if (!req.session.count) {
       req.session.count = 0;
     }

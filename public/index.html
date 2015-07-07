@@ -1,11 +1,11 @@
 <html>
   <body>
-    <form method="POST" action="/login">
+    <form method="POST" action="/api/login-with-form">
       <input type="text" name="username" />
       <input type="password" name="password" />
       <button type="submit">Login</button>
     </form>
 
-    <a href="/auth/twitter/authorization_dialog">Connect with Twitter</a>
+    <a href="/api/oauth/authorization_dialog/twitter">Connect with Twitter</a>
   </body>
 </html>
